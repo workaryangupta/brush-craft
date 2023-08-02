@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        /* div width is 100% unless given
+        div height changes according to text unless given */
+        
+        div{
+            border: 1px solid green;
+            /* background-color: lightpink; */
+            /* border-radius: 50px; */
+            
+        }
+        .outer{
+            width: 140px;
+            height: 47px;
+            border: 3px solid purple;
+            /* for horizontal alighnment */
+            display: flex;
+            /* flex k kuch features FOR HORIZONTAL */
+            justify-content: center;
+            justify-content: space-evenly;
+
+            /* flex k kuch featured for VERTICAL */
+            align-items: center;
+
+        }
+        .red{
+            background-color: lightcoral;
+            width: 40px;
+            height: 40px;
+            border-radius: 50px;
+        }
+        .green{
+            background-color: lightgreen;
+            width: 40px;
+            height: 40px;
+            border-radius: 50px;
+        }
+        .blue{
+            background-color: aqua;
+            width: 40px;
+            height: 40px;
+            border-radius: 50px;
+        }
+        .color-area{
+            height: 100px;
+            width: 100px;
+            border: 1px solid black;
+            margin-top: 30px;
+            margin-left: 30px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="outer">
+        <div class="red">  </div>
+        <div class="green">  </div>
+        <div class="blue">  </div>
+    </div> 
+    <!-- ek aur div bana rha hu for color area -->
+    <div class="color-area">
+
+    </div>
+</body>
+
+<script>
+    // color area ko utha lia
+    let colorArea = document.querySelector(".color-area");
+    // saare color block ko utha liya
+    let redColor = document.querySelector(".red");
+    let greenColor = document.querySelector(".green");
+    let blueColor = document.querySelector(".blue");
+
+    // sabme event listner add krke curr color ko change kr rha
+    redColor.addEventListener("click", function(){
+        colorArea.style.backgroundColor = "lightcoral";
+    })
+    greenColor.addEventListener("click", function(){
+        colorArea.style.backgroundColor = "lightgreen";
+    })
+    blueColor.addEventListener("click", function(){
+        colorArea.style.backgroundColor = "aqua";
+    })
+
+</script>
+
+</html>

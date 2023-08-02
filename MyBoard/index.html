@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .tool-bar{
+            border: 3px solid purple;
+            background-color:cornsilk;
+            display: flex;
+  
+            width: 85vw;
+            /* trick for element center */
+            margin: 0 auto;
+            height: 80px;
+
+            align-items: center;
+            justify-content: space-evenly;
+            border-radius: 3px;
+        }
+        
+        .color-container{
+            border: 1px solid gray;
+            display: flex;
+
+            width: 170px;
+            justify-content: space-evenly;
+            align-items: center;
+            height: 50px;
+            border-radius: 5px;
+        }
+        .tool-img{
+            /* img ko change krna hai to usko height width do */
+            height: 50px;
+        }
+        .color{
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+        }
+        .red{
+            background-color: lightcoral;
+        }
+        .green{
+            background-color: lightgreen;
+        }
+        .blue{
+            background-color: aqua;
+        }
+        .size-box{
+        border: 1px solid gray;
+        display: flex;
+        height: 40px;
+        width: 120px;
+        border-radius: 5px;
+        justify-content: space-evenly;
+        align-items: center;
+        display: none;
+        }
+
+        .size1{
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        background-color: black;
+        }
+        .size2{
+        height: 14px;
+        width: 14px;
+        border-radius: 50%;
+        background-color: black;
+        }
+        .size3{
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        background-color: black;
+        }
+        .size4{
+        height: 22px;
+        width: 22px;
+        border-radius: 50%;
+        background-color: black;
+        }
+        .close{
+            height: 15px;
+            width: 15px;
+            background-color: lightcoral;
+            border-radius: 50%;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        .minimize{
+            height: 15px;
+            width: 15px;
+            background-color: lightgreen;
+            border-radius: 50%;
+        }
+        .navbar{
+            display: flex;
+            height: 13%;
+            justify-content: flex-end;
+            align-items: center;
+            box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+        }
+        .sticky{
+            width : 175px;
+            height: 175px;
+        }
+        .textarea{
+            width: 97.5%;
+            height: 83%;
+            border: none;
+            outline: none;
+            border-top: 2px solid gray;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div class="tool-bar">
+        <div class="tool" id="pencil">
+            <img src="./NewIcons/Black_Pencil.svg" alt="" class="tool-img">
+
+            <div class="size-box">
+                <!-- .size1 + .size2 + .size3 + .size4 -->
+                <div class="size1 size"></div>
+                <div class="size2 size"></div>
+                <div class="size3 size"></div>
+                <div class="size4 size"></div>
+            </div>
+
+        </div>
+        
+        <div class="tool" id="eraser">
+            <img src="./NewIcons/Eraser.svg" alt="" class="tool-img">
+            
+            <div class="size-box">
+                <!-- .size1 + .size2 + .size3 + .size4 -->
+                <div class="size1 size"></div>
+                <div class="size2 size"></div>
+                <div class="size3 size"></div>
+                <div class="size4 size"></div>
+            </div>
+
+        </div>
+        
+        <div class="tool" id="line">
+            <img src="./NewIcons/drawing-pencil-svgrepo-com.svg" alt="" class="tool-img">
+            <div class="size-box">
+                <!-- .size1 + .size2 + .size3 + .size4 -->
+                <div class="size1 size"></div>
+                <div class="size2 size"></div>
+                <div class="size3 size"></div>
+                <div class="size4 size"></div>
+            </div>
+
+        </div>
+
+        <div class="tool" id="rect">
+            <img src="./NewIcons/rectangle-pt-svgrepo-com.svg" alt="" class="tool-img">
+            <div class="size-box">
+                <!-- .size1 + .size2 + .size3 + .size4 -->
+                <div class="size1 size"></div>
+                <div class="size2 size"></div>
+                <div class="size3 size"></div>
+                <div class="size4 size"></div>
+            </div>
+
+        </div>
+
+        <div class="tool" id="stickyPad" >
+            <img src="./NewIcons/StickyNote.svg" alt="" class="tool-img">
+        </div>
+
+        <div class="color-container">
+        <!-- colors ko andar is liye daala kyuki use as a single unit treat krna hai -->
+            <div class="color red"></div>
+            <div class="color green"></div>
+            <div class="color blue"></div>
+        </div>
+    </div>
+    <!-- apne canvas tags -->
+    <canvas> </canvas>  
+</body>
+
+<script>
+    let canvasBoard = document.querySelector("Canvas");
+    let body = document.querySelector("body");
+    let tool = canvasBoard.getContext("2d");
+
+    let pencil = document.querySelector("#pencil");
+    let eraser = document.querySelector("#eraser");
+    let line = document.querySelector("#line");
+    let rect = document.querySelector("#rect");
+    let stickyPad = document.querySelector("#stickyPad");
+    let options = document.querySelectorAll(".size-box");
+
+    canvasBoard.height = window.innerHeight;
+    canvasBoard.width = window.innerWidth;
+
+    tool.strokeStyle = "lightcoral"; // default color ,, canvas height width set krne k baad hi strokestyle change kro
+
+    let cTool = "pencil";
+
+    // 172 - 198 (color change ka logic)
+
+    // saare color block ko utha liya
+    let redColor = document.querySelector(".red");
+    let greenColor = document.querySelector(".green");
+    let blueColor = document.querySelector(".blue");
+
+    // sabme event listner add krke curr color ko change kr rha EXCEPT eraser
+    let currColor = "lightcoral";
+    redColor.addEventListener("click", function(){
+        if (cTool != "eraser"){         //isse  ERASER ka color change nhi hoga
+            tool.strokeStyle = "lightcoral";
+            currColor = "lightcoral";
+        } 
+    })
+    greenColor.addEventListener("click", function(){
+        if (cTool != "eraser"){         //isse  ERASER ka color change nhi hoga
+            tool.strokeStyle = "lightgreen";
+            currColor = "lightgreen";
+        } 
+    })
+    blueColor.addEventListener("click", function(){
+        if (cTool != "eraser"){         //isse  ERASER ka color change nhi hoga
+            tool.strokeStyle = "aqua";
+            currColor = "aqua";
+        } 
+    })
+
+    let boardKaTop = canvasBoard.getBoundingClientRect().top;
+    let boardKaLeft = canvasBoard.getBoundingClientRect().left
+    let iX, iY, fX, fY;
+    let drawingMode = false;
+
+    // for getting iX and iY 
+    body.addEventListener("mousedown", function(e){
+        iX = e.clientX - boardKaLeft;
+        iY = e.clientY - boardKaTop;
+        if (cTool == "pencil" || cTool == "eraser"){
+            drawingMode = true;
+            
+            tool.beginPath();
+            tool.moveTo(iX, iY);
+        }
+    })
+    // for fX and fY
+    body.addEventListener("mouseup", function(e){
+        fX = e.clientX - boardKaLeft;
+        fY = e.clientY - boardKaTop;
+        let height = (fX-iX);
+        let width =  (fY-iY);
+        // tools ka kamaal dikhane wala logic
+        if (cTool == "rect"){
+            tool.strokeRect(iX, iY, height, width);
+        } else if (cTool == "line"){
+            tool.beginPath();
+            tool.moveTo(iX, iY);
+            tool.lineTo(fX, fY);
+            tool.stroke();
+        } else if (cTool == "pencil" || cTool == "eraser"){
+            drawingMode = false;
+        }
+    })
+    
+    body.addEventListener("mousemove", function(e){
+        if (drawingMode == false){
+            return;
+        }
+        if (cTool == "pencil" || cTool == "eraser"){
+            tempfX = e.clientX - boardKaLeft;
+            tempfY = e.clientY - boardKaTop;
+
+            tool.lineTo(tempfX, tempfY);
+            tool.stroke();
+
+            // iX = fX;
+            // iY = fY;
+        }
+    })         
+
+    pencil.addEventListener("click", function(e){
+        if (cTool == "pencil"){
+            //second click -> options show
+            options[0].style.display = "flex";
+
+        } else {
+            cTool = "pencil";
+            tool.lineWidth = pencilSize;
+            tool.strokeStyle = currColor; //yaha pe isliye kiya bcoz eraser use krne k baad strokestyle white reh jaata hai , to use wapas change krne k liye aisa krna pda
+            // currColor variable record rkhta hai ki konsa color select kr rkha tha 
+            for (let i = 0; i < options.length; i++){
+                options[i].style.display = "none";
+            }
+        }
+    })
+
+    eraser.addEventListener("click", function(e){
+        if (cTool == "eraser"){
+            //second click -> options show
+            options[1].style.display = "flex";
+        } else {
+            // tool.strokeStyle = "white";
+            cTool = "eraser";
+            tool.strokeStyle="white";
+            tool.lineWidth = eraserSize;
+            for (let i = 0; i < options.length; i++){
+                options[i].style.display = "none";
+            }
+        }
+    })
+
+    line.addEventListener("click", function(e){
+        if (cTool == "line"){
+            //second click -> options show
+            options[2].style.display = "flex";
+        } else {
+            cTool = "line";
+            tool.lineWidth = lineSize;
+            tool.strokeStyle = currColor; //yaha pe isliye kiya bcoz eraser use krne k baad strokestyle white reh jaata hai , to use wapas change krne k liye aisa krna pda
+            // currColor variable record rkhta hai ki konsa color select kr rkha tha
+            for (let i = 0; i < options.length; i++){
+                options[i].style.display = "none";
+            }
+        }
+    })
+
+    rect.addEventListener("click", function(e){
+        if (cTool == "rect"){
+            //second click -> options show
+            options[3].style.display = "flex";
+        } else {
+            cTool = "rect";
+            tool.lineWidth = rectSize;   
+            tool.strokeStyle = currColor; //yaha pe isliye kiya bcoz eraser use krne k baad strokestyle white reh jaata hai , to use wapas change krne k liye aisa krna pda
+            // currColor variable record rkhta hai ki konsa color select kr rkha tha
+            for (let i = 0; i < options.length; i++){
+                options[i].style.display = "none";
+            }
+        }
+    })
+
+    stickyPad.addEventListener("click", function(e){
+        let sticky = document.createElement("div"); //ye do line se sticky ka 
+        sticky.setAttribute("class", "sticky");     //structure bangya
+        
+        ///inner html for sticky k andar ke maal ka code 
+        sticky.innerHTML =` <div class="navbar">    
+        <div class="minimize">
+        </div>
+        <div class="close">
+        </div>
+    </div>
+    <textarea name="..." class="textarea">
+    </textarea> `;
+
+        body.appendChild(sticky);
+
+        let minimize = document.querySelector(".minimize");
+        let close = document.querySelector(".close");
+        let textArea = document.querySelector(".textarea");
+        let isClosed = false;
+        //close ka logic
+        close.addEventListener("click", function(e){
+            sticky.remove();
+        })
+
+        //minimise ka logic
+        minimize.addEventListener("click", function(e){
+            if (isClosed == false){
+                textArea.style.display = "none";
+            } else {
+                textArea.style.display = "block";
+            }
+            isClosed = !isClosed;
+        })
+    })
+//  ---------   ab yaha se size change ka logic (312 - 410)  -----------------
+    let pencilSize = 5;
+    let eraserSize = 5;
+    let lineSize = 5;
+    let rectSize = 5;
+
+    //event bubbling
+    let sizeBoxArr = document.querySelectorAll(".size-box");
+    sizeBoxArr[0].addEventListener("click", function(e){
+        //actual event occur -> target 
+        let elems = ["size1" , "size2" , "size3" , "size4"];
+        let allTheClasses = e.target.classList;
+        let firstClass = allTheClasses[0];
+        
+        let test = elems.includes(firstClass);
+        if (test){
+            // size change
+            if (firstClass == "size1"){
+                pencilSize = 5;
+            } else if (firstClass == "size2"){
+                pencilSize = 10;
+            } else if (firstClass == "size3"){
+                pencilSize = 15;
+            } else if (firstClass == "size4"){
+                pencilSize = 20;
+            }
+        }
+        tool.lineWidth = pencilSize;
+        //event listener -> curr target
+    })
+
+    sizeBoxArr[1].addEventListener("click", function(e){
+        //actual event occur -> target 
+        let elems = ["size1" , "size2" , "size3" , "size4"];
+        let allTheClasses = e.target.classList;
+        let firstClass = allTheClasses[0];
+        
+        let test = elems.includes(firstClass);
+        if (test){
+            // size change
+            if (firstClass == "size1"){
+                eraserSize = 5;
+            } else if (firstClass == "size2"){
+                eraserSize = 10;
+            } else if (firstClass == "size3"){
+                eraserSize = 15;
+            } else if (firstClass == "size4"){
+                eraserSize = 20;
+            }
+        }
+        tool.lineWidth = eraserSize;
+        //event listener -> curr target
+    })
+
+    sizeBoxArr[2].addEventListener("click", function(e){
+        //actual event occur -> target 
+        let elems = ["size1" , "size2" , "size3" , "size4"];
+        let allTheClasses = e.target.classList;
+        let firstClass = allTheClasses[0];
+        
+        let test = elems.includes(firstClass);
+        if (test){
+            // size change
+            if (firstClass == "size1"){
+                lineSize = 5;
+            } else if (firstClass == "size2"){
+                lineSize = 10;
+            } else if (firstClass == "size3"){
+                lineSize = 15;
+            } else if (firstClass == "size4"){
+                lineSize = 20;
+            }
+        }
+        tool.lineWidth = lineSize;
+        //event listener -> curr target
+    })
+
+    sizeBoxArr[3].addEventListener("click", function(e){
+        //actual event occur -> target 
+        let elems = ["size1" , "size2" , "size3" , "size4"];
+        let allTheClasses = e.target.classList;
+        let firstClass = allTheClasses[0];
+        
+        let test = elems.includes(firstClass);
+        if (test){
+            //size waale button click
+            if (firstClass == "size1"){
+                rectSize = 5;
+            } else if (firstClass == "size2"){
+                rectSize = 10;
+            } else if (firstClass == "size3"){
+                rectSize = 15;
+            } else if (firstClass == "size4"){
+                rectSize = 20;
+            }
+        }
+        tool.lineWidth = rectSize;
+        //event listener -> curr target
+    })
+
+    
+</script>
+</html>
